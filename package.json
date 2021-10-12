@@ -7,7 +7,8 @@
     "prettier:run": "prettier --write .",
     "lint:run:both": "eslint .",
     "lint:run:server": "eslint ./dr-server",
-    "lint:run:gui": "eslint ./dr-gui"
+    "lint:run:gui": "eslint ./dr-gui",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",

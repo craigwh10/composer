@@ -12,11 +12,14 @@ Aiming to reduce the pain of running many microservices locally which may have d
 - [x] Route generation
 - [ ] Version bumping aligning with swagger
 - [ ] Db/Caching setup
+  - [ ] Needing to store user sessions possibly with a defined timeout
 
 ---
 
 **Backlog**
 
+- [ ] Use [electron-packager](https://github.com/electron/electron-packager) to generate an executable that
+      starts the server alongside it
 - [ ] Select file functionality
   - [ ] GET paths to compose files in area [Craig]
   - [ ] POST user selected paths to compose
