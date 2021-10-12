@@ -1,0 +1,12 @@
+dr-gui/node_modules
+dr-gui/dist
+dr-gui/.idea
+dr-gui/.vscode
+
+dr-server/node_modules
+dr-server/dist
+dr-server/.idea
+dr-server/.vscode
+
+.idea
+.vscode
