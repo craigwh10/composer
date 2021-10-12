@@ -1,0 +1,32 @@
+{
+  "name": "composer",
+  "version": "0.0.1",
+  "description": "**Composer**",
+  "main": "index.js",
+  "scripts": {
+    "prettier:run": "prettier --write .",
+    "lint:run:both": "eslint .",
+    "lint:run:server": "eslint ./dr-server",
+    "lint:run:gui": "eslint ./dr-gui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigwh10/composer.git"
+  },
+  "keywords": [
+    "composer"
+  ],
+  "author": "Craig White",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/craigwh10/composer/issues"
+  },
+  "homepage": "https://github.com/craigwh10/composer#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "prettier": "2.4.1"
+  }
+}

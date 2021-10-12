@@ -1,9 +1,9 @@
 interface PathSearcherInputs {
-    pathToInitialFile: string,
+  pathToInitialFile: string;
 }
 
-export async function pathSearcher({pathToInitialFile}: PathSearcherInputs) {
-    console.log(pathToInitialFile);
+export async function pathSearcher({ pathToInitialFile }: PathSearcherInputs) {
+  console.log(pathToInitialFile);
 
-    return 'hi';
+  return "hi";
 }
