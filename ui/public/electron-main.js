@@ -5,7 +5,7 @@ const EventNames = require("../src/shared/EventNames");
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    frame: false,
+    frame: true,
     webPreferences: {
       devTools: isDev,
       nodeIntegration: true,

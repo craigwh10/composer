@@ -2,6 +2,7 @@ ui/node_modules
 ui/dist
 ui/.idea
 ui/.vscode
+ui/.env
 
 server/node_modules
 server/dist
