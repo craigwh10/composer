@@ -13,6 +13,7 @@ Aiming to reduce the pain of running many microservices locally which may have d
 - [ ] Version bumping aligning with swagger
 - [ ] Db/Caching setup
   - [ ] Needing to store user sessions possibly with a defined timeout
+- [ ] Github actions pipeline with linting, and stages of test.
 
 ---
 
