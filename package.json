@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prettier:run": "prettier --write .",
-    "prettier:check": "prettier .",
+    "prettier:check": "prettier --check .",
     "lint:run:both": "eslint .",
     "lint:run:server": "eslint ./dr-server",
     "lint:run:gui": "eslint ./dr-gui",
