@@ -6,23 +6,21 @@ const PORT = 3002;
 
 (async () => {
   try {
-
     initialiseSwagger(fastify);
 
     // Initialise application:
     const routesInitialised = await initialiseRoutes();
 
-    fastify.ready(err => {
+    fastify.ready((err) => {
       if (err) throw err;
 
       // @ts-ignore
-      fastify.swagger()
+      fastify.swagger();
 
-      console.log(`Swagger available via http://localhost:${PORT}/explorer`)
+      console.log(`Swagger available via http://localhost:${PORT}/explorer`);
 
-      fastify.listen(PORT)
-    })
-
+      fastify.listen(PORT);
+    });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

@@ -5,5 +5,5 @@ interface PathSearcherInputs {
 export async function pathSearcher({ pathToInitialFile }: PathSearcherInputs) {
   console.log(pathToInitialFile);
 
-  return "hi";
+  return "his";
 }
