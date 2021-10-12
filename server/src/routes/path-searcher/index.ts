@@ -5,11 +5,12 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import { pathSearcher } from "../../services/path-searcher";
 
 module.exports = function (route: string) {
-  console.log(route);
   fastify.route({
     method: "GET",
     url: `/${route}`,
     schema: {
+      description: 'Get routes to compose files',
+      summary: '',
       body: {
         type: "object",
         path: { type: "string" },
