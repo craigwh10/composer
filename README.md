@@ -1,5 +1,10 @@
 **Composer**
 
+Automatically scans available docker-compose files within a set range and aggregates them in an
+interface to be run without conflicts.
+
+Aiming to reduce the pain of running many microservices locally which may have dependencies or shared ports.
+
 ---
 
 **Enhancements**

@@ -27,6 +27,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.26.1",
+    "husky": "^7.0.0",
     "prettier": "2.4.1"
   }
 }
