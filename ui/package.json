@@ -31,6 +31,7 @@
     "electronmon": "^1.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-query": "^3.26.0",
     "react-router-dom": "^5.3.0",
     "react-scripts": "3.4.1",
     "remote": "^0.2.6",
@@ -40,7 +41,7 @@
   },
   "main": "public/electron-main.js",
   "scripts": {
-    "start": "concurrently \"npm run react-serve\" \"wait-on http://localhost:3000 && npm run electron-start\"",
+    "start": "concurrently \"npm run react-serve\" \"wait-on http://localhost:3005 && npm run electron-start\"",
     "build": "npm run react-build && npm run electron-build",
     "release": "npm run react-build && npm run electron-release",
     "electron-start": "electronmon .",

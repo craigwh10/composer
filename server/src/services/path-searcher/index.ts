@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 interface PathSearcherInputs {
   pathToInitialFile: string;
   searchDepth?: number;
@@ -7,7 +10,9 @@ export async function pathSearcher({
   pathToInitialFile,
   searchDepth = 5,
 }: PathSearcherInputs) {
-  console.log(pathToInitialFile);
+  const initialRoot = await fs.readdirSync(
+    `../`.repeat(searchDepth) + pathToInitialFile
+  );
 
-  return "his";
+  return "test";
 }

@@ -7,7 +7,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     frame: true,
     webPreferences: {
-      devTools: isDev,
+      devTools: true,
       nodeIntegration: true,
       enableRemoteModule: true,
     },
@@ -15,9 +15,11 @@ const createWindow = () => {
 
   mainWindow.loadURL(
     isDev
-      ? "http://localhost:3000"
+      ? `http://localhost:3005`
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
+  mainWindow.webContents.openDevTools();
 
   ipcMain.handle(EventNames.OPEN_PATH_FINDER, async (event, arg) => {
     const { filePaths } = await dialog.showOpenDialog(mainWindow, {
