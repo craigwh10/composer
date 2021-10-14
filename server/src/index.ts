@@ -2,7 +2,7 @@ import { initialiseSwagger } from "./initialiseSwagger";
 import { initialiseRoutes } from "./routes";
 
 export const fastify = require("fastify")({ logger: true });
-const PORT = 3002;
+const PORT = 3010;
 
 (async () => {
   try {

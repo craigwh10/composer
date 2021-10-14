@@ -7,10 +7,9 @@ import { pathSearcher } from "../../services/path-searcher";
 module.exports = function (route: string) {
   fastify.get(`/${route}/:path`, {
     schema: {
-      description: "Get routes to compose files",
-      summary: "",
+      description: "Get routes to compose files based on a query",
       params: {
-        path: { type: "string", example: "/test" },
+        initialSearchPath: { type: "string", example: "/test" },
       },
       querystring: {
         depth: {
@@ -18,6 +17,15 @@ module.exports = function (route: string) {
           example: 5,
           description:
             "Number of layers to search from the selected directory, default is 5.",
+        },
+        directoriesToIgnore: {
+          type: "array",
+          items: {
+            type: "string",
+            example: "node_modules",
+          },
+          description:
+            "Directories to ignore, that are unimportant to the query.",
         },
       },
       response: {
@@ -48,11 +56,10 @@ module.exports = function (route: string) {
       },
     },
     preHandler: async (
-      request: FastifyRequest<{ Params: { path: string } }>,
+      request: FastifyRequest<{ Params: { initialSearchPath: string } }>,
       reply: FastifyReply
     ) => {
-      if (!request.params.path.length) {
-        console.log(request.params);
+      if (!request.params.initialSearchPath.length) {
         reply.status(400);
         return reply.send({
           RequestError: "No path provided in this request.",
@@ -61,14 +68,15 @@ module.exports = function (route: string) {
     },
     handler: async (
       request: FastifyRequest<{
-        Params: { path: string };
-        Querystring: { depth: number };
+        Params: { initialSearchPath: string };
+        Querystring: { depth: number; directoriesToIgnore: Array<string> };
       }>,
       reply: FastifyReply
     ) => {
       const result = await pathSearcher({
-        pathToInitialFile: request.params.path,
+        pathToInitialFile: request.params.initialSearchPath,
         searchDepth: request.query.depth,
+        directoriesToIgnore: request.query.directoriesToIgnore,
       });
 
       if (result) {
