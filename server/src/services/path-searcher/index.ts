@@ -70,7 +70,9 @@ export async function pathSearcher({
             }
 
             // Is a compose file
-            if (item.match(/^(.)*(docker|compose)\.(yml|json)+$/g)) {
+            if (
+              item.match(/^(.)*(docker|compose)((\.\w*){0,4})\.(yml|json)+$/g)
+            ) {
               composePaths.push(fullPath);
             }
 

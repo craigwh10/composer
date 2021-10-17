@@ -13,7 +13,7 @@ describe("pathSearcher", () => {
 
       expect(result.timeTakenMs).toBeLessThan(20); // ms
       expect(result.searchedDirs).toEqual(24);
-      expect(result.composePaths.length).toEqual(14);
+      expect(result.composePaths.length).toEqual(15);
     });
 
     it("should not include ignored directory results in query", async () => {
@@ -25,7 +25,7 @@ describe("pathSearcher", () => {
 
       expect(result.timeTakenMs).toBeLessThan(20); // ms
       expect(result.searchedDirs).toEqual(23);
-      expect(result.composePaths.length).toEqual(13);
+      expect(result.composePaths.length).toEqual(14);
     });
 
     it("should return an error if dirs from current lands on ignored directory", async () => {
