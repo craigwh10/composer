@@ -13,6 +13,33 @@ describe("pathSearcher", () => {
 
       expect(result.timeTakenMs).toBeLessThan(20); // ms
       expect(result.searchedDirs).toEqual(24);
+      expect(result.composePaths.length).toEqual(14);
+    });
+
+    it("should not include ignored directory results in query", async () => {
+      const result = await pathSearcher({
+        pathToInitialFile: pathToFakeFile,
+        numberOfDirsFromCurrent: 2,
+        directoriesToIgnore: ["real-microservice", "node_modules"],
+      });
+
+      expect(result.timeTakenMs).toBeLessThan(20); // ms
+      expect(result.searchedDirs).toEqual(23);
+      expect(result.composePaths.length).toEqual(13);
+    });
+
+    it("should return an error if dirs from current lands on ignored directory", async () => {
+      try {
+        await pathSearcher({
+          pathToInitialFile: pathToFakeFile,
+          numberOfDirsFromCurrent: 2,
+          directoriesToIgnore: ["support"],
+        });
+      } catch (err) {
+        expect(err).toEqual(
+          new Error("Number of dirs from current leads to an ignored directory")
+        );
+      }
     });
   });
 });

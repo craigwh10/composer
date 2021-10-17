@@ -23,12 +23,23 @@ export async function pathSearcher({
   const startTime = benchmark.timeStart();
   const startMemory = benchmark.getMemory();
 
+  const ignoreMatches = new RegExp(
+    "(" + directoriesToIgnore.join("|") + ")",
+    "g"
+  );
+
   const initialDirectoryPath = pathToInitialFile.split("/");
   initialDirectoryPath.pop();
 
   const initialPath = initialDirectoryPath
     .slice(0, initialDirectoryPath.length - numberOfDirsFromCurrent)
     .join("/");
+
+  if (initialPath.match(ignoreMatches)) {
+    throw new Error(
+      "Number of dirs from current leads to an ignored directory"
+    );
+  }
 
   let composePaths: string[] = [];
 
@@ -45,9 +56,18 @@ export async function pathSearcher({
         // Save the dir path to be checked against
         const dir = cachedDirs[cachedDirRow];
 
+        if (dir.match(ignoreMatches)) {
+          return;
+        }
+
         fs.readdir(dir, {}, function (err, filesOrDirs) {
           filesOrDirs.forEach((item) => {
             const fullPath = `${dir}/${item}`;
+
+            if (item.match(ignoreMatches)) {
+              // Skip this check if directory is ignored.
+              return;
+            }
 
             // Is a compose file
             if (item.match(/^(.)*(docker|compose)\.(yml|json)+$/g)) {
