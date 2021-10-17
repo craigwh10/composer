@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import * as benchmark from "../../benchmark/utils";
 
 interface PathSearcherInputs {
   pathToInitialFile: string;
@@ -10,6 +11,8 @@ interface PathSearcherInputs {
 interface PathSearcherResponse {
   composePaths: Array<string>;
   searchedDirs: number;
+  timeTakenMs: number;
+  averageMemory: number;
 }
 
 export async function pathSearcher({
@@ -17,6 +20,9 @@ export async function pathSearcher({
   directoriesToIgnore = ["node_modules"],
   numberOfDirsFromCurrent = 5,
 }: PathSearcherInputs): Promise<PathSearcherResponse> {
+  const startTime = benchmark.timeStart();
+  const startMemory = benchmark.getMemory();
+
   const initialDirectoryPath = pathToInitialFile.split("/");
   initialDirectoryPath.pop();
 
@@ -63,7 +69,15 @@ export async function pathSearcher({
 
           if (++searchCount === total) {
             if (cachedDirs.length === cachedDirRow) {
-              resolve({ composePaths, searchedDirs: totalSearchCount });
+              resolve({
+                composePaths,
+                searchedDirs: totalSearchCount,
+                timeTakenMs: benchmark.timeEnd(startTime),
+                averageMemory: benchmark.getAverageValue([
+                  startMemory,
+                  benchmark.getMemory(),
+                ]),
+              });
             } else {
               // If more dirs added, continue scanning
               checkDirectory();
