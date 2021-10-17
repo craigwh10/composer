@@ -2,7 +2,7 @@ import { fastify } from "../../index";
 
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import { pathSearcher } from "../../services/path-searcher";
+import { getComposePaths } from "../../services/get-compose-paths";
 
 module.exports = function (route: string) {
   fastify.get(`/${route}/:path`, {
@@ -73,9 +73,9 @@ module.exports = function (route: string) {
       }>,
       reply: FastifyReply
     ) => {
-      const result = await pathSearcher({
+      const result = await getComposePaths({
         pathToInitialFile: request.params.initialSearchPath,
-        searchDepth: request.query.depth,
+        numberOfDirsFromCurrent: request.query.depth,
         directoriesToIgnore: request.query.directoriesToIgnore,
       });
 

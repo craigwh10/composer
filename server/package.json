@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon .",
-    "test:unit": "jest ."
+    "test:unit": "jest --"
   },
   "keywords": [
     "dependency",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.0.2",
+    "@types/js-yaml": "^4.0.3",
     "@types/node": "^16.10.3",
     "jest": "^27.2.5",
     "nodemon": "^2.0.13",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "fastify": "^3.22.0",
-    "fastify-swagger": "^4.12.4"
+    "fastify-swagger": "^4.12.4",
+    "js-yaml": "^4.1.0"
   }
 }

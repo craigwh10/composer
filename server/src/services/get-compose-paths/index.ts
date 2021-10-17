@@ -15,7 +15,7 @@ interface PathSearcherResponse {
   averageMemory: number;
 }
 
-export async function pathSearcher({
+export async function getComposePaths({
   pathToInitialFile,
   directoriesToIgnore = ["node_modules"],
   numberOfDirsFromCurrent = 5,

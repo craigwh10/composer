@@ -1,4 +1,4 @@
-import { pathSearcher } from "./index";
+import { getComposePaths } from "./index";
 import path from "path";
 
 describe("pathSearcher", () => {
@@ -6,7 +6,7 @@ describe("pathSearcher", () => {
     const pathToFakeFile = `${process.cwd()}/src/__mocks__/support/fake_directory/test2/real-microservice/real.c`;
 
     it("should return the expected length of compose related files and be reasonably fast", async () => {
-      const result = await pathSearcher({
+      const result = await getComposePaths({
         pathToInitialFile: pathToFakeFile,
         numberOfDirsFromCurrent: 2,
       });
@@ -17,7 +17,7 @@ describe("pathSearcher", () => {
     });
 
     it("should not include ignored directory results in query", async () => {
-      const result = await pathSearcher({
+      const result = await getComposePaths({
         pathToInitialFile: pathToFakeFile,
         numberOfDirsFromCurrent: 2,
         directoriesToIgnore: ["real-microservice", "node_modules"],
@@ -30,7 +30,7 @@ describe("pathSearcher", () => {
 
     it("should return an error if dirs from current lands on ignored directory", async () => {
       try {
-        await pathSearcher({
+        await getComposePaths({
           pathToInitialFile: pathToFakeFile,
           numberOfDirsFromCurrent: 2,
           directoriesToIgnore: ["support"],
