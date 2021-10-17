@@ -9,6 +9,8 @@ server/dist
 server/.idea
 server/.vscode
 
+regression-tests/node_modules
+
 .idea
 .vscode
 node_modules

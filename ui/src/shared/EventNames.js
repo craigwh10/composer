@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
-  OPEN_PATH_FINDER: "open-pathfinder",
+   OPEN_PATH_FINDER: "open-pathfinder",
 };

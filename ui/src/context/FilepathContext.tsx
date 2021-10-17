@@ -1,32 +1,39 @@
 import React, { useState, createContext } from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-const context = createContext<{
-  filePath: string | null;
-  setFilePath: Dispatch<SetStateAction<string | null>>;
-}>({
-  filePath: null,
-  setFilePath: () => {},
+export type filePathContextState = string | null;
+export type filePathContextSetters = Dispatch<
+   React.SetStateAction<filePathContextState>
+>;
+
+export type filePathContext = {
+   filePath: filePathContextState;
+   setFilePath: filePathContextSetters;
+};
+
+export const FilePathContext = createContext<filePathContext>({
+   filePath: null,
+   setFilePath: () => {},
 });
 
-export function getFileProviderContext() {
-  return context;
+export function filePathContext() {
+   return FilePathContext;
 }
 
 export default function FilepathProvider(props: any) {
-  const { Provider } = getFileProviderContext();
-  const { children } = props;
+   const { Provider } = filePathContext();
+   const { children } = props;
 
-  const [filePath, setFilePath] = useState<string | null>(null);
+   const [filePath, setFilePath] = useState<filePathContextState>(null);
 
-  return (
-    <Provider
-      value={{
-        filePath,
-        setFilePath,
-      }}
-    >
-      {children}
-    </Provider>
-  );
+   return (
+      <Provider
+         value={{
+            filePath,
+            setFilePath,
+         }}
+      >
+         {children}
+      </Provider>
+   );
 }

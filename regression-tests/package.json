@@ -1,0 +1,30 @@
+{
+   "name": "regression-tests",
+   "version": "0.0.1",
+   "description": "composer regression suites",
+   "main": "index.ts",
+   "scripts": {
+      "start": "cucumber-js features/**/*.feature --require-module ts-node/register --require test.setup.ts --require step-definitions/**/*.ts"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/craigwh10/composer.git"
+   },
+   "author": "Craig White",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/craigwh10/composer/issues"
+   },
+   "homepage": "https://github.com/craigwh10/composer#readme",
+   "devDependencies": {
+      "@cucumber/cucumber": "^8.0.0-rc.1",
+      "@playwright/test": "^1.16.1",
+      "@types/node": "^16.11.4",
+      "playwright": "^1.16.1",
+      "ts-node": "^10.4.0",
+      "typescript": "^4.4.4"
+   },
+   "dependencies": {
+      "electron": "^15.3.0"
+   }
+}
