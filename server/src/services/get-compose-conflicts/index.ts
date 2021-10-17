@@ -8,12 +8,6 @@ interface GetComposeConflicts {
   composePaths: Array<string>;
 }
 
-interface Conflict {
-  comparedPath: string;
-  // Want to include them all for use
-  conflictedService: unknown;
-}
-
 interface ComposeGenericSchemaService {
   container_name: string;
   image: string;
@@ -32,13 +26,13 @@ interface ComposeGenericSchema {
 
 export async function getComposeConflicts({
   composePaths,
-}: GetComposeConflicts): Promise<Array<Conflict>> {
+}: GetComposeConflicts): Promise<Array<string>> {
   let storedComposeJson: Array<{
     path: string;
     jsonCompose: ComposeGenericSchema;
   }> = [];
   let pathsCheckedTogether: Array<[string, string]> = [];
-  let conflicts: Array<Conflict> = [];
+  let conflicts: Array<string> = [];
 
   // Convert all compose files into json.
   for (const composePath of composePaths) {
@@ -76,10 +70,10 @@ export async function getComposeConflicts({
               }
             )
           ) {
-            conflicts.push({
-              comparedPath: pathJson.path,
-              conflictedService: service,
-            });
+            // Stringify so we can accurately compare results.
+            if (!conflicts.includes(JSON.stringify(service))) {
+              conflicts.push(JSON.stringify(service));
+            }
           }
         }
 
