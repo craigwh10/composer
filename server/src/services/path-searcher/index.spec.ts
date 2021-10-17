@@ -1,9 +1,9 @@
-import { pathSearcher } from "../../path-searcher/index";
+import { pathSearcher } from "./index";
 import path from "path";
 
 describe("pathSearcher", () => {
   describe("i'm passing in an absolute path to a file", () => {
-    const pathToFakeFile = `${process.cwd()}/src/__tests__/support/fake_directory/test2/real-microservice/real.c`;
+    const pathToFakeFile = `${process.cwd()}/src/__mocks__/support/fake_directory/test2/real-microservice/real.c`;
 
     it("should return the expected length of compose related files and be reasonably fast", async () => {
       const result = await pathSearcher({
