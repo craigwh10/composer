@@ -10,7 +10,8 @@ describe("getComposeConflicts", () => {
         ],
       });
 
-      expect(result).toEqual({});
+      // 3 conflicting images between compose files.
+      expect(result.length).toEqual(3);
     });
   });
 });

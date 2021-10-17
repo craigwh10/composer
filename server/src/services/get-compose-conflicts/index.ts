@@ -10,38 +10,83 @@ interface GetComposeConflicts {
 
 interface Conflict {
   comparedPath: string;
-  serviceName: string;
   // Want to include them all for use
-  properties: unknown;
+  conflictedService: unknown;
 }
 
-interface CheckResults {
-  composePath: string;
-  conflict: Array<Conflict>;
+interface ComposeGenericSchemaService {
+  container_name: string;
+  image: string;
+  networks: Array<string>;
+  volumes: Array<string>;
+}
+
+interface ComposeGenericSchemaServices {
+  [key: string]: ComposeGenericSchemaService;
+}
+
+interface ComposeGenericSchema {
+  version: string;
+  services: ComposeGenericSchemaServices;
 }
 
 export async function getComposeConflicts({
   composePaths,
-}: GetComposeConflicts): // Temporarily
-Promise<Array<CheckResults> | any> {
-  // Initialise check results.
-  // Store current path.
-  // Initialise readRow value as 0.
-  // Initialise initialPathsChecked as {0, initialPathsChecked}.
-  // Have a cached check at the start of all the paths minus current.
-  // Loop through all cached paths.
-  // ++readRow
-  // until readRow is equal to cached check.
-  // ++ initialPathsChecked.
-  // Add to check results if had conflicts within [services]
-  // Recurse
+}: GetComposeConflicts): Promise<Array<Conflict>> {
+  let storedComposeJson: Array<{
+    path: string;
+    jsonCompose: ComposeGenericSchema;
+  }> = [];
+  let pathsCheckedTogether: Array<[string, string]> = [];
+  let conflicts: Array<Conflict> = [];
 
-  try {
-    const result = await readFile(composePaths[0], "utf8");
+  // Convert all compose files into json.
+  for (const composePath of composePaths) {
+    const result = await readFile(composePath, "utf8");
+    const asJson = yaml.load(result) as ComposeGenericSchema;
 
-    const asJson = yaml.load(result);
-    console.log("result", asJson);
-  } catch (err) {
-    console.log(err);
+    storedComposeJson.push({ path: composePath, jsonCompose: asJson });
   }
+
+  for (const pathJson of storedComposeJson) {
+    // Iterate pathJson over everything but itself.
+    const pathJsonsToCheckAgainst = storedComposeJson;
+    storedComposeJson.splice(storedComposeJson.indexOf(pathJson), 1);
+
+    for (const pathJsonToCheckAgainst of pathJsonsToCheckAgainst) {
+      const pathsBeingChecked = [
+        pathJson.path,
+        pathJsonToCheckAgainst.path,
+      ].sort() as [string, string];
+
+      // If it's not been checked before, do the check then add it as checked.
+      // Otherwise don't do anything
+      if (pathsCheckedTogether.indexOf(pathsBeingChecked) === -1) {
+        // TODO: QUESTION: Is versioning needed to be considered
+        //                 much here?
+
+        for (const service of Object.values(pathJson.jsonCompose.services)) {
+          // Check if service uses same image
+          // as any in compared service.
+          // TODO: QUESTION: Is this adequate for finding dependencies?
+          if (
+            Object.values(pathJsonToCheckAgainst.jsonCompose.services).some(
+              ({ image }) => {
+                return image === service.image;
+              }
+            )
+          ) {
+            conflicts.push({
+              comparedPath: pathJson.path,
+              conflictedService: service,
+            });
+          }
+        }
+
+        pathsCheckedTogether.push(pathsBeingChecked);
+      }
+    }
+  }
+
+  return conflicts;
 }
