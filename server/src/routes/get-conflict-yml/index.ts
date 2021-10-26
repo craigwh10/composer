@@ -1,6 +1,9 @@
 import type { FastifyReply, FastifyRequest, FastifyInstance } from "fastify";
 
-import { getConflictYml } from "../../services/get-conflict-yml";
+import {
+   getConflictYml,
+   IGetConflictYmlResult,
+} from "../../services/get-conflict-yml";
 
 type RequestBody = { Querystring: { composePaths: string } };
 
@@ -66,10 +69,10 @@ module.exports = function (route: string, fastify: FastifyInstance) {
          request: FastifyRequest<RequestBody>,
          reply: FastifyReply
       ) => {
-         let result;
+         let result: IGetConflictYmlResult;
 
          // Within tests passing in unicode seperators appears to throw.
-         if (request.query.composePaths.toString().match(/%2C/g)) {
+         if (request.query.composePaths.toString().match(/%2C|%2F/g)) {
             result = await getConflictYml({
                composePaths: decodeURIComponent(
                   request.query.composePaths.toString()
@@ -83,7 +86,9 @@ module.exports = function (route: string, fastify: FastifyInstance) {
             });
          }
 
-         if (result) {
+         const isEmptyYml = Object.values(result.ymlResult).length === 3;
+
+         if (!isEmptyYml) {
             reply.status(200);
             reply.send(result);
          } else {

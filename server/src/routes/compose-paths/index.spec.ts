@@ -1,15 +1,29 @@
 import { build } from "../../__mocks__/helpers/fastifyBuild";
-import { getFakeFilePathFromCwd } from "../../__mocks__/helpers/getFakeFilePathFromCwd";
+import {
+   getFakeFilePathFromCwd,
+   getFakeFilePathNoResultsFromCwd,
+} from "../../__mocks__/helpers/getFakeFilePathFromCwd";
 
 const app = build();
 
 describe("/compose-paths/${path}?searchDepth={searchDepth} (API test)", () => {
-   it("with no params should return 404", async () => {
+   it("should return 404 if no compose paths found in area", async () => {
+      const fakePath = getFakeFilePathNoResultsFromCwd(process.cwd());
+
       const result = await app.inject({
-         url: "/compose-paths",
+         url: `/compose-paths/${fakePath}`,
+         query: { depth: "0" },
       });
 
       expect(result.statusCode).toBe(404);
+   });
+
+   it("with no params should return 400", async () => {
+      const result = await app.inject({
+         url: "/compose-paths/",
+      });
+
+      expect(result.statusCode).toBe(400);
    });
 
    it("with a path that returns no files should return 500", async () => {
@@ -30,7 +44,7 @@ describe("/compose-paths/${path}?searchDepth={searchDepth} (API test)", () => {
 
       const result = await app.inject({
          url: `/compose-paths/${fakePath}`,
-         query: { searchDepth: "5" },
+         query: { depth: "5" },
       });
 
       expect(result.statusCode).toBe(200);

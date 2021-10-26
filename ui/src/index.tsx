@@ -4,16 +4,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import * as serviceWorker from "./serviceWorker";
 import { Routes } from "./routes";
+import { queryClientOptions } from "./shared/config/queryClientOptions";
 
-const queryClient = new QueryClient({
-   defaultOptions: {
-      queries: {
-         refetchOnWindowFocus: false,
-         refetchOnReconnect: false,
-         retry: false,
-      },
-   },
-});
+const queryClient = new QueryClient(queryClientOptions);
 
 ReactDOM.render(
    <React.StrictMode>

@@ -3,7 +3,7 @@ import { getFakeComposePathArrayFromCwd } from "../../__mocks__/helpers/getFakeC
 
 const app = build();
 
-describe("/get-conflict-yml?composePaths={composePaths} (API test)", () => {
+describe.only("/get-conflict-yml?composePaths={composePaths} (API test)", () => {
    it("with no params should return 400", async () => {
       const result = await app.inject({
          url: "/get-conflict-yml",
@@ -24,7 +24,7 @@ describe("/get-conflict-yml?composePaths={composePaths} (API test)", () => {
       });
    });
 
-   it("with a path set that returns no results should return 200", async () => {
+   it("with a path set that returns no results should return 404", async () => {
       const result = await app.inject({
          headers: {
             "Content-Type": "application/json",
@@ -33,8 +33,8 @@ describe("/get-conflict-yml?composePaths={composePaths} (API test)", () => {
          query: { composePaths: getFakeComposePathArrayFromCwd(process.cwd()) },
       });
 
-      expect(result.statusCode).toBe(200);
-      expect(result.json()["ymlResult"].length).not.toBeGreaterThan(30);
+      expect(result.body).toEqual("No results from provided compose path.");
+      expect(result.statusCode).toBe(404);
    });
 
    it("with a path set that returns results should return 200", async () => {

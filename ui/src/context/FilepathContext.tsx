@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch } from "react";
 
 export type filePathContextState = string | null;
 export type filePathContextSetters = Dispatch<

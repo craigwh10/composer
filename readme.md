@@ -1,6 +1,10 @@
-**Composer**
+###Composer ![example workflow](https://github.com/craigwh10/composer/actions/workflows/main.yml/badge.svg) ![badge](https://shields.io/badge/server--coverage-95-green) ![badge](https://shields.io/badge/ui--coverage-95-green)
 
-Project board: [Composer board link](https://github.com/craigwh10/composer/projects/1)
+Project board: [Open source board](https://github.com/craigwh10/composer/projects/1)
+
+---
+
+####How to start:
 
 > You can run these directly from root.
 
@@ -12,28 +16,36 @@ npm run installdeps
 npm run start:dev
 ```
 
+---
+
+####How to run regression pack:
+
+> We use playwright to run regression tests
+
 ```shell
+# Install dependencies for UI, Regression & Server.
 npm run installdeps
 
-# To run regression tests with concurrent server and app
+# Run regression tests with concurrent server and app instances.
 npm run test
-
-# OR:
-npm run start:test
-# and in seperate terminal
-cd regression-tests
-npm run start
 ```
 
 ---
 
-**Testing**
+####Extra detail:
 
--  E2E Regression
-   -  Feature level
-   -  Gherkin syntax BDD scenarios
--  Component
-   -  API tests
--  Unit
-   -  Whitebox flow of functions
-   -  Mocked dependencies
+_Testing "strategy":_
+
+> E2E
+>
+> > -  Feature level
+> > -  Gherkin syntax BDD scenarios
+>
+> Component
+>
+> > -  API tests
+>
+> Unit
+>
+> > -  Generally whitebox flow of functions
+> > -  Mocked dependencies

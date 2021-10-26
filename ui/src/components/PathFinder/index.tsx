@@ -35,7 +35,7 @@ export const PathFinder = () => {
    const handleSubmit = async () => {
       if (filePath) {
          await getComposePathsByPath({
-            chosenSearchPath: filePath,
+            searchPath: filePath,
             directoriesFromInitial: searchDepth,
          });
       }
@@ -83,7 +83,7 @@ export const PathFinder = () => {
                </pre>
             </details>
          ) : (
-            <div></div>
+            <div data-testid={"pathFinder-emptyComposeResult"}></div>
          )}
       </div>
    );

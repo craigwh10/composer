@@ -44,7 +44,7 @@ interface ComposeGenericSchema {
    services: ComposeGenericSchemaServices;
 }
 
-interface IGetConflictYmlResult {
+export interface IGetConflictYmlResult {
    ymlResult: string;
    averageMemory: number;
    timeTakenMs: number;
