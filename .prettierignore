@@ -1,3 +1,5 @@
+.github
+
 ui/node_modules
 ui/dist
 ui/.idea

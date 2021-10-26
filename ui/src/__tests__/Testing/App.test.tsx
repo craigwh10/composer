@@ -1,9 +1,13 @@
-// import React from 'react'
-// import { render } from '@testing-library/react'
-// import App from '../React/App'
-//
-// test('renders learn react link', () => {
-// 	const { getByText } = render(<App />)
-// 	const linkElement = getByText(/learn react/i)
-// 	expect(linkElement).toBeInTheDocument()
-// })
+import React from "react";
+import { render, screen } from "@testing-library/react";
+
+import { InfoBox } from "../../components/InfoBox";
+
+// Example test :)
+test("will be removed", () => {
+   render(<InfoBox type={"info"}>Test</InfoBox>);
+
+   const query = screen.getByText("Test");
+
+   expect(query).toBeInTheDocument();
+});

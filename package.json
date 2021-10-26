@@ -1,35 +1,47 @@
 {
-  "name": "composer",
-  "version": "0.0.1",
-  "description": "**Composer**",
-  "main": "index.js",
-  "scripts": {
-    "prettier:run": "prettier --write .",
-    "prettier:check": "prettier --check .",
-    "lint:run:both": "eslint .",
-    "lint:run:server": "eslint ./dr-server",
-    "lint:run:gui": "eslint ./dr-gui",
-    "prepare": "husky install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/craigwh10/composer.git"
-  },
-  "keywords": [
-    "composer"
-  ],
-  "author": "Craig White",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/craigwh10/composer/issues"
-  },
-  "homepage": "https://github.com/craigwh10/composer#readme",
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "husky": "^7.0.0",
-    "prettier": "2.4.1"
-  }
+   "name": "composer",
+   "version": "0.0.1",
+   "description": "**Composer**",
+   "main": "index.js",
+   "scripts": {
+      "prettier:run": "prettier --write .",
+      "prettier:check": "prettier --check .",
+      "lint:run:both": "eslint .",
+      "lint:run:server": "eslint ./server",
+      "lint:run:ui": "eslint ./ui",
+      "prepare": "husky install",
+      "start:dev": "concurrently \"npm start --prefix server\" \"npm start --prefix ui\"",
+      "start:test": "concurrently \"npm start --prefix server\" \"npm --prefix ui run react-serve:test\"",
+      "test": "concurrently -k \"npm run start:test\" \"wait-on http://localhost:3005 && npm --prefix regression-tests run start && npm\"",
+      "installdeps": "echo installing monorepo dev dependencies && npm install && npm run installothers",
+      "installothers": "(echo installing server dependencies; cd server; npm install;) && (echo installing ui dependencies; cd ui; npm install;) && (echo installing regression dependencies; cd regression-tests; npm install;)",
+      "prodinstall": "(npm ci) && (cd server; npm ci;) && (cd ui; npm ci)"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/craigwh10/composer.git"
+   },
+   "keywords": [
+      "composer"
+   ],
+   "author": "Craig White",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/craigwh10/composer/issues"
+   },
+   "homepage": "https://github.com/craigwh10/composer#readme",
+   "devDependencies": {
+      "@commitlint/cli": "^13.2.1",
+      "@commitlint/config-conventional": "^13.2.0",
+      "@typescript-eslint/eslint-plugin": "^5.2.0",
+      "@typescript-eslint/parser": "^5.2.0",
+      "concurrently": "^6.3.0",
+      "env-cmd": "^10.1.0",
+      "eslint": "^8.1.0",
+      "eslint-plugin-react": "^7.26.1",
+      "husky": "^7.0.0",
+      "prettier": "2.4.1",
+      "wait-on": "^6.0.0"
+   },
+   "dependencies": {}
 }

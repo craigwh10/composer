@@ -1,33 +1,38 @@
 {
-  "name": "dr-server",
-  "version": "0.0.1",
-  "description": "server for running file operations for dependency runner",
-  "main": "index.js",
-  "scripts": {
-    "start:dev": "nodemon .",
-    "test:unit": "jest --"
-  },
-  "keywords": [
-    "dependency",
-    "runner",
-    "docker",
-    "compose"
-  ],
-  "author": "Craig White",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@types/js-yaml": "^4.0.3",
-    "@types/node": "^16.10.3",
-    "jest": "^27.2.5",
-    "nodemon": "^2.0.13",
-    "ts-jest": "^27.0.6",
-    "ts-node": "^10.3.0",
-    "typescript": "^4.4.3"
-  },
-  "dependencies": {
-    "fastify": "^3.22.0",
-    "fastify-swagger": "^4.12.4",
-    "js-yaml": "^4.1.0"
-  }
+   "name": "dr-server",
+   "version": "0.0.1",
+   "description": "server for running file operations for dependency runner",
+   "main": "src/index.ts",
+   "scripts": {
+      "start": "ts-node .",
+      "start:dev": "nodemon .",
+      "test:unit": "jest --"
+   },
+   "keywords": [
+      "dependency",
+      "runner",
+      "docker",
+      "compose"
+   ],
+   "author": "Craig White",
+   "license": "ISC",
+   "devDependencies": {
+      "@types/jest": "^27.0.2",
+      "@types/js-yaml": "^4.0.3",
+      "@types/node": "^16.10.3",
+      "fastify-autoload": "^3.9.0",
+      "jest": "^27.2.5",
+      "nodemon": "^2.0.13",
+      "ts-jest": "^27.0.6",
+      "ts-node": "^10.3.0",
+      "typescript": "^4.4.3"
+   },
+   "dependencies": {
+      "fastify": "^3.22.0",
+      "fastify-cors": "^6.0.2",
+      "fastify-helmet": "^5.3.2",
+      "fastify-swagger": "^4.12.4",
+      "js-yaml": "^4.1.0",
+      "pino-pretty": "^7.1.0"
+   }
 }

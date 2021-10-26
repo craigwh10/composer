@@ -1,115 +1,169 @@
-import fs from "fs";
-import path from "path";
+import fs, { statSync } from "fs";
+import type { FastifyLoggerInstance } from "fastify";
+
 import * as benchmark from "../../benchmark/utils";
 
 interface PathSearcherInputs {
-  pathToInitialFile: string;
-  directoriesToIgnore?: Array<string>;
-  numberOfDirsFromCurrent?: number;
+   pathToInitialFile: string;
+   directoriesToIgnore?: Array<string>;
+   numberOfDirsFromCurrent?: number;
+   logger: FastifyLoggerInstance;
 }
 
 interface PathSearcherResponse {
-  composePaths: Array<string>;
-  searchedDirs: number;
-  timeTakenMs: number;
-  averageMemory: number;
+   composePaths: Array<string>;
+   searchedDirs: number;
+   timeTakenMs: number;
+   averageMemory: number;
 }
 
 export async function getComposePaths({
-  pathToInitialFile,
-  directoriesToIgnore = ["node_modules"],
-  numberOfDirsFromCurrent = 5,
-}: PathSearcherInputs): Promise<PathSearcherResponse> {
-  const startTime = benchmark.timeStart();
-  const startMemory = benchmark.getMemory();
+   pathToInitialFile,
+   directoriesToIgnore = ["node_modules"],
+   numberOfDirsFromCurrent = 5,
+   logger,
+}: PathSearcherInputs): Promise<PathSearcherResponse | undefined> {
+   const { timeTakenMs, averageMemory } = benchmark.serviceBenchmarks();
 
-  const ignoreMatches = new RegExp(
-    "(" + directoriesToIgnore.join("|") + ")",
-    "g"
-  );
+   const ignoreMatches = new RegExp(
+      "(" + directoriesToIgnore.join("|") + ")",
+      "g"
+   );
 
-  const initialDirectoryPath = pathToInitialFile.split("/");
-  initialDirectoryPath.pop();
+   logger.info({
+      message: `initialised method`,
+      params: {
+         pathToInitialFile,
+         directoriesToIgnore,
+         numberOfDirsFromCurrent,
+      },
+   });
 
-  const initialPath = initialDirectoryPath
-    .slice(0, initialDirectoryPath.length - numberOfDirsFromCurrent)
-    .join("/");
+   const initialDirectoryPath = pathToInitialFile.split("/");
+   initialDirectoryPath.pop();
 
-  if (initialPath.match(ignoreMatches)) {
-    throw new Error(
-      "Number of dirs from current leads to an ignored directory"
-    );
-  }
+   const initialPath = initialDirectoryPath
+      .slice(0, initialDirectoryPath.length - numberOfDirsFromCurrent)
+      .join("/");
 
-  let composePaths: string[] = [];
+   logger.info({
+      message: `initial paths generated`,
+      result: initialPath,
+   });
 
-  return new Promise(function (resolve) {
-    let searchCount = 0;
-    let totalSearchCount = 0;
-    let cachedDirs: string[] = [initialPath];
-    let searchDirsLength: number = 0;
-    let cachedDirRow = 0;
+   const pathExists = fs.existsSync(initialPath);
 
-    function checkDirectory() {
-      let total = cachedDirs.length;
-      for (; cachedDirRow < cachedDirs.length; cachedDirRow++) {
-        // Save the dir path to be checked against
-        const dir = cachedDirs[cachedDirRow];
+   if (!pathExists) {
+      const err = new Error(
+         `Path doesnt exist on your computer: ${initialPath}`
+      );
 
-        if (dir.match(ignoreMatches)) {
-          return;
-        }
+      logger.error({
+         message: err.message,
+         stack: err.stack,
+         params: initialPath,
+      });
 
-        fs.readdir(dir, {}, function (err, filesOrDirs) {
-          filesOrDirs.forEach((item) => {
-            const fullPath = `${dir}/${item}`;
+      throw err;
+   }
 
-            if (item.match(ignoreMatches)) {
-              // Skip this check if directory is ignored.
-              return;
+   if (initialPath.match(ignoreMatches)) {
+      const err = new Error(
+         "Number of dirs from current leads to an ignored directory"
+      );
+
+      logger.error({
+         message: err.message,
+         stack: err.stack,
+         params: initialPath,
+      });
+
+      throw err;
+   }
+
+   let composePaths: string[] = [];
+
+   return new Promise(function (resolve) {
+      let searchCount = 0;
+      let totalSearchCount = 0;
+      let cachedDirs: string[] = [initialPath];
+      let cachedDirRow = 0;
+
+      function checkDirectory() {
+         const total = cachedDirs.length;
+         for (; cachedDirRow < cachedDirs.length; cachedDirRow++) {
+            // Save the dir path to be checked against
+            const dir = cachedDirs[cachedDirRow];
+
+            if (dir.match(ignoreMatches)) {
+               return;
             }
 
-            // Is a compose file
-            if (
-              item.match(/^(.)*(docker|compose)((\.\w*){0,4})\.(yml|json)+$/g)
-            ) {
-              composePaths.push(fullPath);
-            }
+            fs.readdir(dir, {}, function (err, filesOrDirs) {
+               if (!filesOrDirs) return;
 
-            if (
-              // item is a directory
-              !item.match(/([\w]+\.)+[\w]+(?=[\s]|$)/g) &&
-              // ignore hidden files
-              !item.match(/^\..*/)
-            ) {
-              cachedDirs.push(fullPath);
-              totalSearchCount++;
-            }
-          });
+               filesOrDirs.forEach((item) => {
+                  const fullPath = `${dir}/${item}`;
 
-          // All rows checked
+                  if (item.match(ignoreMatches)) {
+                     // Skip this check if directory is ignored.
+                     return;
+                  }
 
-          if (++searchCount === total) {
-            if (cachedDirs.length === cachedDirRow) {
-              resolve({
-                composePaths,
-                searchedDirs: totalSearchCount,
-                timeTakenMs: benchmark.timeEnd(startTime),
-                averageMemory: benchmark.getAverageValue([
-                  startMemory,
-                  benchmark.getMemory(),
-                ]),
-              });
-            } else {
-              // If more dirs added, continue scanning
-              checkDirectory();
-            }
-          }
-        });
+                  // Is a compose file
+                  if (
+                     item.match(
+                        /^(.)*(docker|compose)((\.\w*){0,4})\.(yml|json)+$/g
+                     )
+                  ) {
+                     composePaths.push(fullPath);
+                  }
+
+                  // Check if is not an alias
+                  if (!fs.existsSync(fullPath)) return;
+
+                  const stats = statSync(fullPath);
+
+                  if (
+                     // ignore hidden files
+                     !item.match(/^\..*/) &&
+                     !stats.isSymbolicLink() &&
+                     stats.isDirectory()
+                  ) {
+                     cachedDirs.push(fullPath);
+                     totalSearchCount++;
+                  }
+               });
+
+               // All rows checked
+
+               if (++searchCount === total) {
+                  if (cachedDirs.length === cachedDirRow) {
+                     logger.info({
+                        message: `result`,
+                        result: {
+                           composePaths,
+                           searchedDirs: totalSearchCount,
+                           timeTakenMs: timeTakenMs(),
+                           averageMemory: averageMemory(),
+                        },
+                     });
+                     resolve({
+                        composePaths,
+                        searchedDirs: totalSearchCount,
+                        timeTakenMs: timeTakenMs(),
+                        averageMemory: averageMemory(),
+                     });
+                  } else {
+                     // If more dirs added, continue scanning
+                     checkDirectory();
+                  }
+               }
+            });
+         }
       }
-    }
 
-    // Initialise.
-    checkDirectory();
-  });
+      // Initialise.
+      checkDirectory();
+   });
 }
