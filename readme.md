@@ -1,10 +1,10 @@
-###Composer ![example workflow](https://github.com/craigwh10/composer/actions/workflows/main.yml/badge.svg) ![badge](https://shields.io/badge/server--coverage-95-green) ![badge](https://shields.io/badge/ui--coverage-95-green)
+# Composer ![example workflow](https://github.com/craigwh10/composer/actions/workflows/main.yml/badge.svg) ![badge](https://shields.io/badge/server--coverage-95-green) ![badge](https://shields.io/badge/ui--coverage-95-green)
 
 Project board: [Open source board](https://github.com/craigwh10/composer/projects/1)
 
 ---
 
-####How to start:
+#### How to start:
 
 > You can run these directly from root.
 
@@ -18,9 +18,9 @@ npm run start:dev
 
 ---
 
-####How to run regression pack:
+#### How to run regression pack:
 
-> We use playwright to run regression tests
+> We use [playwright](https://playwright.dev) to run regression tests
 
 ```shell
 # Install dependencies for UI, Regression & Server.
@@ -32,7 +32,7 @@ npm run test
 
 ---
 
-####Extra detail:
+#### Extra detail:
 
 _Testing "strategy":_
 
