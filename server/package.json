@@ -6,7 +6,7 @@
    "scripts": {
       "start": "ts-node .",
       "start:dev": "nodemon .",
-      "test:unit": "jest --"
+      "test:unit": "jest --collectCoverage --"
    },
    "keywords": [
       "dependency",

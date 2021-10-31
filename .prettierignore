@@ -1,10 +1,12 @@
 .github
 
+ui/coverage
 ui/node_modules
 ui/dist
 ui/.idea
 ui/.vscode
 
+server/coverage
 server/node_modules
 server/dist
 server/.idea

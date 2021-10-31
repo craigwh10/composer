@@ -23,17 +23,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: npm run installdeps
-      - name: Lint ui
+      - name: 🧹 Lint ui
         run: npm run lint:run:ui
-      - name: Lint server
+      - name: 🧹 Lint server
         run: npm run lint:run:server
-      - name: Run server tests
+      - name: 🧪 Run server tests
         run: |
           cd server
           npm run test:unit
-      - name: Run ui tests
+      - name: 🧪 Run ui tests
         run: |
           cd ui
           npm run test:unit

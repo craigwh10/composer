@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { fetchAsJson } from "../__utils__/fetchAsJson";
 
 interface composePathReturn {
    timeTakenMs: number;
@@ -7,38 +8,6 @@ interface composePathReturn {
    composePaths: Array<string>;
    averageMemory: number;
 }
-
-interface FetchComposePathsInput {
-   chosenSearchPath: string;
-   directoriesFromInitial?: number;
-}
-
-export const fetchComposePaths = async ({
-   chosenSearchPath,
-   directoriesFromInitial = 5,
-}: FetchComposePathsInput): Promise<composePathReturn | undefined> => {
-   if (!chosenSearchPath) {
-      return;
-   }
-
-   const headers = {
-      method: "GET",
-      headers: {
-         "Access-Control-Allow-Origin": "*",
-         "Cache-Control": "no-cache",
-         "Content-Type": "application/json",
-      },
-   };
-
-   const path = new URLSearchParams(chosenSearchPath)
-      .toString()
-      .replace("=", "");
-
-   return fetch(
-      `http://localhost:3010/compose-paths/${path}?depth=${directoriesFromInitial}`,
-      headers
-   ).then((res) => res.json());
-};
 
 export const useComposePaths = (chosenSearchPath: string | null) => {
    const queryClient = useQueryClient();
@@ -51,10 +20,8 @@ export const useComposePaths = (chosenSearchPath: string | null) => {
       Error
    >(
       HOOK_KEY,
-      async () => {
-         if (!chosenSearchPath) throw new Error("No path provided");
-         return getComposePathsByPath({ chosenSearchPath });
-      },
+      //@ts-ignore - mutation only hook.
+      async (): composePathReturn => undefined,
       {
          enabled: false,
          initialData: undefined,
@@ -64,12 +31,24 @@ export const useComposePaths = (chosenSearchPath: string | null) => {
    const { mutateAsync: getComposePathsByPath } = useMutation<
       composePathReturn | undefined,
       undefined,
-      { chosenSearchPath: string; directoriesFromInitial?: number }
+      { searchPath: string; directoriesFromInitial?: number }
    >(
       HOOK_KEY,
-      async ({ chosenSearchPath, directoriesFromInitial }) => {
+      async ({ searchPath, directoriesFromInitial = 5 }) => {
          setMutateIsLoading(true);
-         return fetchComposePaths({ chosenSearchPath, directoriesFromInitial });
+         if (!searchPath) {
+            setMutateIsLoading(false);
+
+            // TODO: Either replace this with return void or
+            //       fix branch test issue mentioned in
+            // https://github.com/craigwh10/composer/issues/41
+            throw new Error("No path provided for query.");
+         }
+
+         return fetchAsJson("compose-paths", [
+            { name: "path", value: searchPath, valueIsPath: true },
+            { name: "depth", isQuery: true, value: directoriesFromInitial },
+         ]);
       },
       {
          onSuccess: (res) => {

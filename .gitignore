@@ -3,7 +3,9 @@ ui/dist
 ui/.idea
 ui/.vscode
 ui/.env
+ui/coverage
 
+server/coverage
 server/node_modules
 server/dist
 server/.idea

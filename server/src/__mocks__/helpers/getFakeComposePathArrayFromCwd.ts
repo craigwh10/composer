@@ -6,12 +6,6 @@ export function getFakeComposePathArrayFromCwd(
 
    if (!withResult) {
       unSuffixedPaths = [
-         "/src/__mocks__/support/fake_directory/test2/dir1/docker-compose.test.yml",
-         "/src/__mocks__/support/fake_directory/test2/dir1/docker-compose.yml",
-         "/src/__mocks__/support/fake_directory/test2/dir1/deeperdir1/docker-compose.yml",
-         "/src/__mocks__/support/fake_directory/test2/dir1/deeperdir3/docker-compose.json",
-         "/src/__mocks__/support/fake_directory/test2/dir1/deeperdir2/docker-compose.yml",
-         "/src/__mocks__/support/fake_directory/test2/dir2/deeperdir1/docker-compose.yml",
          "/src/__mocks__/support/fake_directory/test2/dir2/real-microservice/docker-compose.yml",
       ];
    } else {
@@ -34,11 +28,13 @@ export function getFakeComposePathArrayFromCwd(
       ];
    }
 
-   const suffixedAndFlat = unSuffixedPaths
-      .map((path) => {
-         return `${cwd}${path}`;
-      })
-      .join(",");
+   const suffixedAndFlat = withResult
+      ? unSuffixedPaths
+           .map((path) => {
+              return `${cwd}${path}`;
+           })
+           .join(",")
+      : `${cwd}${unSuffixedPaths[0]}`;
 
    return new URLSearchParams(suffixedAndFlat).toString().replace("=", "");
 }

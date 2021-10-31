@@ -38,6 +38,6 @@ export const GenerateConflictYml = ({
          </div>
       );
    } else {
-      return <div></div>;
+      return <div data-testid={`generateconflictyml-${type}-empty`}></div>;
    }
 };

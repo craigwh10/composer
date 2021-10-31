@@ -58,7 +58,7 @@ module.exports = function (route: string, fastify: FastifyInstance) {
          request: FastifyRequest<{ Params: { initialSearchPath: string } }>,
          reply: FastifyReply
       ) => {
-         if (!request.params.initialSearchPath.length) {
+         if (!request.params?.initialSearchPath) {
             reply.status(400);
             reply.send({
                RequestError: "No path provided in this request.",
@@ -82,7 +82,7 @@ module.exports = function (route: string, fastify: FastifyInstance) {
             logger: request.log,
          });
 
-         if (result) {
+         if (result?.composePaths.length) {
             reply.status(200);
             reply.send(result);
          } else {
