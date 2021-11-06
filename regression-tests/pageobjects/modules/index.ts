@@ -32,6 +32,10 @@ export class ExplorerModule {
       return "[data-testid='generateconflictyml-docker-compose'] code";
    }
 
+   get emptyDockerComposeConflict() {
+      return "[data-testid='generateconflictyml-docker-compose-empty']";
+   }
+
    async moduleExists() {
       return this.page.isVisible(this.selectFileHiddenInput, { timeout: 8000 });
    }
@@ -59,5 +63,9 @@ export class ExplorerModule {
 
    async getConflictCode() {
       return this.page.textContent(this.generatedYml);
+   }
+
+   async isEmptyConflict() {
+      return this.page.isEnabled(this.emptyDockerComposeConflict);
    }
 }

@@ -6,6 +6,7 @@ import { ExplorerModule } from "../pageobjects/modules";
 const { _electron: electron } = require("playwright");
 
 import { getWorld } from "../world";
+import { delay } from "../support/utils";
 
 Given("I start on the explorer page", async function () {
    const app = getWorld();
@@ -51,6 +52,6 @@ Then("I {string} get some conflict yml back", async (string) => {
    if (string === "do") {
       expect(await explorer.getConflictCode()).toContain("services");
    } else {
-      expect(await explorer.getConflictCode()).not.toContain("services");
+      expect(await explorer.isEmptyConflict()).toBe(true);
    }
 });

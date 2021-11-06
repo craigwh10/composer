@@ -33,7 +33,7 @@ describe.only("/get-conflict-yml?composePaths={composePaths} (API test)", () => 
          query: { composePaths: getFakeComposePathArrayFromCwd(process.cwd()) },
       });
 
-      expect(result.body).toEqual("No results from provided compose path.");
+      expect(result.body).toEqual("{}");
       expect(result.statusCode).toBe(404);
    });
 

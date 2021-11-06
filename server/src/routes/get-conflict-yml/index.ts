@@ -93,7 +93,7 @@ module.exports = function (route: string, fastify: FastifyInstance) {
             reply.send(result);
          } else {
             reply.status(404);
-            reply.send("No results from provided compose path.");
+            reply.send({});
          }
       },
    });

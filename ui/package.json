@@ -17,7 +17,7 @@
       "@testing-library/react": "^9.5.0",
       "@testing-library/user-event": "^7.2.1",
       "concurrently": "^5.2.0",
-      "electron": "^9.1.0",
+      "electron": "^11.1.0",
       "electron-builder": "^22.13.1",
       "electron-is-dev": "^1.2.0",
       "react": "^16.13.1",
@@ -76,5 +76,8 @@
       "electronmon": "^2.0.2",
       "jest": "^27.3.1",
       "ts-jest": "^27.0.7"
+   },
+   "resolutions": {
+      "electron": "^11.0.1"
    }
 }

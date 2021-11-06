@@ -10,7 +10,7 @@ Feature: Getting conflicts of compose files
     Then I "do" get some conflict yml back
 
   Scenario: I do not get conflict files back
-    When I select a path with a compose file in range "2"
+    When I select a path with a compose file in range "1"
     Then I click search compose files
-    Then I get paths to "7" compose files
+    Then I get paths to "2" compose files
     Then I "dont" get some conflict yml back
